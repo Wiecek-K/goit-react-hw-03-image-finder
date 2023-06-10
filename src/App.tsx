@@ -9,15 +9,17 @@ interface State {
   query: string;
   loading: boolean;
   photos: PhotoI[];
+  isEnd: boolean;
 }
 export default class App extends Component<object, State> {
   constructor(props: object) {
     super(props);
     this.state = {
       page: 1,
-      query: "dog",
+      query: "red flag sky",
       loading: false,
       photos: [],
+      isEnd: false,
     };
   }
   loadMore = () => {
@@ -54,6 +56,13 @@ export default class App extends Component<object, State> {
       this.setState((prevState) => ({
         photos: [...prevState.photos, ...data.hits],
       }));
+      console.log(data);
+      console.log(data.totalHits);
+      if (data.total < this.state.page * 12) {
+        console.log("koniec");
+
+        this.setState({ isEnd: true });
+      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -92,7 +101,9 @@ export default class App extends Component<object, State> {
       // <Searchbar></Searchbar>
       <div className="App">
         <ImageGallery photos={this.state.photos} />
-        <Button onClick={this.loadMore} title="Load More" />
+        {!this.state.isEnd ? (
+          <Button onClick={this.loadMore} title="Load More" />
+        ) : null}
       </div>
       // <div>
       //   <form onSubmit={this.handleSubmit}>
