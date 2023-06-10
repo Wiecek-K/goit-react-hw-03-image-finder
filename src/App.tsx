@@ -15,7 +15,7 @@ export default class App extends Component<object, State> {
     super(props);
     this.state = {
       page: 1,
-      query: "",
+      query: "dog",
       loading: false,
       photos: [],
     };
@@ -51,7 +51,9 @@ export default class App extends Component<object, State> {
     this.setState({ loading: true });
     try {
       const data = await fetchPhotosWithQuery(query, page);
-      this.setState({ photos: data.hits });
+      this.setState((prevState) => ({
+        photos: [...prevState.photos, ...data.hits],
+      }));
     } catch (err) {
       console.log(err);
     } finally {
@@ -59,7 +61,12 @@ export default class App extends Component<object, State> {
     }
   };
   componentDidMount() {
-    this.getPhotos("dog");
+    this.getPhotos(this.state.query, this.state.page);
+  }
+  componentDidUpdate(prevProps: object, prevState: State) {
+    if (prevState.page !== this.state.page) {
+      this.getPhotos(this.state.query, this.state.page);
+    }
   }
 
   render() {

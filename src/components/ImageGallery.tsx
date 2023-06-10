@@ -6,17 +6,7 @@ import ImageGalleryItem from "./ImageGalleryItem";
 
 axios.defaults.baseURL = "https://hn.algolia.com/api/v1";
 
-// const ArticleList = ({ articles }) => (
-//   <ul>
-//     {articles.map(({ objectID, url, title }) => (
-//       <li key={objectID}>
-//         <a href={url} target="_blank" rel="noreferrer noopener">
-//           {title}
-//         </a>
-//       </li>
-//     ))}
-//   </ul>
-// );
+
 interface ImageGalleryProps {
   photos: PhotoI[];
 }
@@ -27,7 +17,6 @@ class ImageGallery extends Component<ImageGalleryProps> {
   }
 
   render() {
-    //  { id, webformatURL, largeImageURL, tags }
     const { photos } = this.props;
     return (
       <ul className="ImageGallery">
@@ -39,17 +28,6 @@ class ImageGallery extends Component<ImageGalleryProps> {
             largePhoto={largeImageURL}
           />
         ))}
-
-        {/* {photos.map(({ id, webformatURL, largeImageURL, tags }) => {
-          <li key={id}>
-            <ImageGalleryItem
-              id={id}
-              src={webformatURL}
-              alt={tags}
-              largePhoto={largeImageURL}
-            />
-          </li>;
-        })} */}
       </ul>
     );
   }
