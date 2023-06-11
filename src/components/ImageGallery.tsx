@@ -1,11 +1,6 @@
 import { Component } from "react";
-import axios from "axios";
-
-import { PhotoI } from "../types/Photo.ts";
 import ImageGalleryItem from "./ImageGalleryItem";
-
-axios.defaults.baseURL = "https://hn.algolia.com/api/v1";
-
+import { PhotoI } from "../types/Photo.ts";
 
 interface ImageGalleryProps {
   photos: PhotoI[];
@@ -15,7 +10,7 @@ class ImageGallery extends Component<ImageGalleryProps> {
   constructor(props: ImageGalleryProps) {
     super(props);
   }
-
+  
   render() {
     const { photos } = this.props;
     return (

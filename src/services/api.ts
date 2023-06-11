@@ -8,6 +8,7 @@ interface fetchType {
   totalHits: number;
   hits: PhotoI[];
 }
+
 export const fetchPhotosWithQuery = async (
   searchQuery: string,
   page = 1

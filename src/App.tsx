@@ -1,10 +1,12 @@
 import { Component } from "react";
+
 import ImageGallery from "./components/ImageGallery";
 import Button from "./components/Button";
-import type { PhotoI } from "./types/Photo.ts";
-import { fetchPhotosWithQuery } from "./services/api";
 import Loader from "./components/Loader.tsx";
 import Searchbar from "./components/Searchbar.tsx";
+
+import { fetchPhotosWithQuery } from "./services/api";
+import type { PhotoI } from "./types/Photo.ts";
 
 interface State {
   page: number;
@@ -13,17 +15,36 @@ interface State {
   photos: PhotoI[];
   isEnd: boolean;
 }
+
 export default class App extends Component<object, State> {
   constructor(props: object) {
     super(props);
     this.state = {
       page: 1,
-      query: "red flag sky",
+      query: "dog",
       isloading: false,
       photos: [],
       isEnd: false,
     };
   }
+
+  getPhotos = async (query: string, page?: number) => {
+    this.setState({ isloading: true });
+    try {
+      const data = await fetchPhotosWithQuery(query, page);
+      this.setState((prevState) => ({
+        photos: [...prevState.photos, ...data.hits],
+      }));
+      if (data.total > this.state.page * 12) {
+        this.setState({ isEnd: false });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.setState({ isloading: false });
+    }
+  };
+
   loadMore = () => {
     this.setState((prevState) => ({
       page: prevState.page + 1,
@@ -39,25 +60,6 @@ export default class App extends Component<object, State> {
     this.getPhotos(query, 1);
   };
 
-  getPhotos = async (query: string, page?: number) => {
-    this.setState({ isloading: true });
-    try {
-      const data = await fetchPhotosWithQuery(query, page);
-      this.setState((prevState) => ({
-        photos: [...prevState.photos, ...data.hits],
-      }));
-      console.log(data);
-      console.log(data.totalHits);
-      if (data.total > this.state.page * 12) {
-        console.log("koniec");
-        this.setState({ isEnd: false });
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      this.setState({ isloading: false });
-    }
-  };
   componentDidMount() {
     this.getPhotos(this.state.query, this.state.page);
   }

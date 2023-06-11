@@ -6,6 +6,7 @@ interface SearchbarProps {
 interface State {
   inputValue: string;
 }
+
 class Searchbar extends React.Component<SearchbarProps, State> {
   constructor(props: SearchbarProps) {
     super(props);
@@ -21,12 +22,7 @@ class Searchbar extends React.Component<SearchbarProps, State> {
   render() {
     return (
       <header className="Searchbar">
-        <form
-          className="SearchForm"
-          onSubmit={(e) => {
-            this.onSubmit(e);
-          }}
-        >
+        <form className="SearchForm" onSubmit={this.onSubmit}>
           <button type="submit" className="SearchForm-button">
             <span className="SearchForm-button-label">Search</span>
           </button>
@@ -44,5 +40,4 @@ class Searchbar extends React.Component<SearchbarProps, State> {
     );
   }
 }
-
 export default Searchbar;

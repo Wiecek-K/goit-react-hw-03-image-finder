@@ -1,10 +1,11 @@
-import { Blocks } from "react-loader-spinner";
 import React from "react";
+import { Blocks } from "react-loader-spinner";
 
 class Loader extends React.Component<object> {
   constructor(props: object) {
     super(props);
   }
+  
   render() {
     return (
       <Blocks
@@ -18,5 +19,4 @@ class Loader extends React.Component<object> {
     );
   }
 }
-
 export default Loader;

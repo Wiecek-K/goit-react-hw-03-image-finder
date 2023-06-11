@@ -9,6 +9,7 @@ interface ImageGalleryItemProps {
 interface State {
   isModalOpen: boolean;
 }
+
 class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
   constructor(props: ImageGalleryItemProps) {
     super(props);
@@ -21,7 +22,6 @@ class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
     this.setState({ isModalOpen: true });
   };
   closeModal = () => {
-    console.log("zamknij");
     this.setState({ isModalOpen: false });
   };
 
@@ -45,5 +45,4 @@ class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
     );
   }
 }
-
 export default ImageGalleryItem;
