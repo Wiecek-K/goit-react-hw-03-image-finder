@@ -3,11 +3,12 @@ import ImageGallery from "./components/ImageGallery";
 import Button from "./components/Button";
 import type { PhotoI } from "./types/Photo.ts";
 import { fetchPhotosWithQuery } from "./services/api";
+import Loader from "./components/Loader.tsx";
 
 interface State {
   page: number;
   query: string;
-  loading: boolean;
+  isloading: boolean;
   photos: PhotoI[];
   isEnd: boolean;
 }
@@ -17,7 +18,7 @@ export default class App extends Component<object, State> {
     this.state = {
       page: 1,
       query: "red flag sky",
-      loading: false,
+      isloading: false,
       photos: [],
       isEnd: false,
     };
@@ -50,7 +51,7 @@ export default class App extends Component<object, State> {
   // };
 
   getPhotos = async (query: string, page?: number) => {
-    this.setState({ loading: true });
+    this.setState({ isloading: true });
     try {
       const data = await fetchPhotosWithQuery(query, page);
       this.setState((prevState) => ({
@@ -66,7 +67,7 @@ export default class App extends Component<object, State> {
     } catch (err) {
       console.log(err);
     } finally {
-      this.setState({ loading: false });
+      this.setState({ isloading: false });
     }
   };
   componentDidMount() {
@@ -101,6 +102,7 @@ export default class App extends Component<object, State> {
       // <Searchbar></Searchbar>
       <div className="App">
         <ImageGallery photos={this.state.photos} />
+        {this.state.isloading ? <Loader /> : null}
         {!this.state.isEnd ? (
           <Button onClick={this.loadMore} title="Load More" />
         ) : null}
