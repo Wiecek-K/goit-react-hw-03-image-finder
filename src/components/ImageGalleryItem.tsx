@@ -16,19 +16,7 @@ class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
       isModalOpen: false,
     };
   }
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleEscKey);
-  }
 
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleEscKey);
-  }
-
-  handleEscKey(event: KeyboardEvent) {
-    if (event.key === "Escape") {
-      this.setState({ isModalOpen: !this.state.isModalOpen });
-    }
-  }
   openModal = () => {
     this.setState({ isModalOpen: true });
   };
@@ -39,8 +27,9 @@ class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
 
   render() {
     return (
-      <li className="ImageGalleryItem" onClick={this.openModal}>
+      <li className="ImageGalleryItem">
         <img
+          onClick={this.openModal}
           className="ImageGalleryItem-image"
           src={this.props.src}
           alt={this.props.alt}
