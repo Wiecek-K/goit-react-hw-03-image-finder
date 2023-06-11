@@ -63,7 +63,7 @@ export default class App extends Component<object, State> {
   componentDidMount() {
     this.getPhotos(this.state.query, this.state.page);
   }
-  componentDidUpdate(prevProps: object, prevState: State) {
+  componentDidUpdate(_prevProps: object, prevState: State) {
     if (prevState.page !== this.state.page) {
       this.getPhotos(this.state.query, this.state.page);
     }
