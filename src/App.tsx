@@ -55,7 +55,6 @@ export default class App extends Component<object, State> {
   };
   handleSubmit = (query: string) => {
     this.resetPhotosData();
-    console.log("submit");
     this.setState({ query });
     this.getPhotos(query, 1);
   };
