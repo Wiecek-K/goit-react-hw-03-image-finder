@@ -1,40 +1,42 @@
 import { Component } from "react";
 import Modal from "./Modal";
 
-// const ArticleList = ({ articles }) => (
-//   <ul>
-//     {articles.map(({ objectID, url, title }) => (
-//       <li key={objectID}>
-//         <a href={url} target="_blank" rel="noreferrer noopener">
-//           {title}
-//         </a>
-//       </li>
-//     ))}
-//   </ul>
-// );
-
 interface ImageGalleryItemProps {
   src: string;
   alt: string;
   largePhoto: string;
 }
 interface State {
-  showModal: boolean;
+  isModalOpen: boolean;
 }
 class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
   constructor(props: ImageGalleryItemProps) {
     super(props);
     this.state = {
-      showModal: false,
+      isModalOpen: false,
     };
   }
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleEscKey);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleEscKey);
+  }
+
+  handleEscKey(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.setState({ isModalOpen: !this.state.isModalOpen });
+    }
+  }
   openModal = () => {
-    this.setState({ showModal: true });
+    this.setState({ isModalOpen: true });
   };
   closeModal = () => {
     console.log("zamknij");
-    this.setState({ showModal: false });
+    this.setState({ isModalOpen: false });
   };
+
   render() {
     return (
       <li className="ImageGalleryItem" onClick={this.openModal}>
@@ -43,7 +45,7 @@ class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
           src={this.props.src}
           alt={this.props.alt}
         />
-        {this.state.showModal ? (
+        {this.state.isModalOpen ? (
           <Modal
             src={this.props.largePhoto}
             alt={this.props.alt}

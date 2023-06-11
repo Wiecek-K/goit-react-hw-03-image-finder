@@ -4,6 +4,7 @@ import Button from "./components/Button";
 import type { PhotoI } from "./types/Photo.ts";
 import { fetchPhotosWithQuery } from "./services/api";
 import Loader from "./components/Loader.tsx";
+import Searchbar from "./components/Searchbar.tsx";
 
 interface State {
   page: number;
@@ -27,28 +28,16 @@ export default class App extends Component<object, State> {
     this.setState((prevState) => ({
       page: prevState.page + 1,
     }));
-    // handleSubmit = (ev) => {
-    //   ev.preventDefault();
-    //   this.getArticles(this.state.query);
-    // };
-
-    // handleChange = (ev) => {
-    //   const { name, value } = ev.target;
-    //   this.setState({ [name]: value });
-    // };
   };
-  // getArticles = async (query) => {
-  //   this.setState({ loading: true });
-  //   try {
-  //     const articles = await api.fetchArticlesWithQuery(query);
-  //     const title = `Wyniki dla zapytania: '${query}'`;
-  //     this.setState({ articles, title });
-  //   } catch (err) {
-  //     this.setState({ error: err });
-  //   } finally {
-  //     this.setState({ loading: false });
-  //   }
-  // };
+  resetPhotosData = () => {
+    this.setState({ photos: [], page: 1, isEnd: true });
+  };
+  handleSubmit = (query: string) => {
+    this.resetPhotosData();
+    console.log("submit");
+    this.setState({ query });
+    this.getPhotos(query, 1);
+  };
 
   getPhotos = async (query: string, page?: number) => {
     this.setState({ isloading: true });
@@ -59,10 +48,9 @@ export default class App extends Component<object, State> {
       }));
       console.log(data);
       console.log(data.totalHits);
-      if (data.total < this.state.page * 12) {
+      if (data.total > this.state.page * 12) {
         console.log("koniec");
-
-        this.setState({ isEnd: true });
+        this.setState({ isEnd: false });
       }
     } catch (err) {
       console.log(err);
@@ -80,67 +68,17 @@ export default class App extends Component<object, State> {
   }
 
   render() {
-    // const { articles, loading, error, query, title } = this.state;
-    // let content = null;
-    // if (loading) {
-    //   content = <p>Ładowanie artykułów...</p>;
-    // } else {
-    //   if (error !== null) {
-    //     content = <p>Wystąpił błąd ({error})</p>;
-    //   } else if (!articles.length) {
-    //     content = <p>Brak artykułów</p>;
-    //   } else {
-    //     content = (
-    //       <>
-    //         <h1>{title}</h1>
-    //         <ArticleList articles={articles} />
-    //       </>
-    //     );
-    //   }
-    // }
     return (
-      // <Searchbar></Searchbar>
-      <div className="App">
-        <ImageGallery photos={this.state.photos} />
-        {this.state.isloading ? <Loader /> : null}
-        {!this.state.isEnd ? (
-          <Button onClick={this.loadMore} title="Load More" />
-        ) : null}
-      </div>
-      // <div>
-      //   <form onSubmit={this.handleSubmit}>
-      //     <label htmlFor={inputId}>Słowo kluczowe</label>
-      //     <br />
-      //     <input
-      //       type="text"
-      //       name="query"
-      //       value={query}
-      //       id={inputId}
-      //       onChange={this.handleChange}
-      //     />
-      //     <br />
-      //     <button type="submit">Otrzymaj listę artykułów</button>
-      //   </form>
-      //   {content}
-
-      //   {/* {articles.length && !loading ? <h1>{title}</h1> : null}
-      //           {loading && <p>Ładowanie artykułów</p>}
-      //           {error !== null && <p>Wystąpił błąd</p>}
-      //           {!articles.length && !loading ? <p>Brak artykułów</p> : loading ? null : <ArticleList articles={articles} />}
-      //           {articles.length && loading ? null : <ArticleList articles={articles} />} */}
-
-      //   {/* {articles.length > 0 ? <ArticleList articles={articles} /> : <p>Brak artykułów</p>} */}
-
-      //   {/* {loading ? (
-      //               <p>Ładowanie artykułów...</p>
-      //           ) : error !== null ? (
-      //               <p>Wystąpił błąd: {error}</p>
-      //           ) : articles.length > 0 ? (
-      //               <ArticleList articles={articles} />
-      //           ) : (
-      //               <p>Brak artykułów</p>
-      //           )} */}
-      // </div>
+      <>
+        <Searchbar handleSubmit={this.handleSubmit} />
+        <div className="App">
+          <ImageGallery photos={this.state.photos} />
+          {this.state.isloading ? <Loader /> : null}
+          {!this.state.isEnd ? (
+            <Button onClick={this.loadMore} title="Load More" />
+          ) : null}
+        </div>
+      </>
     );
   }
 }
