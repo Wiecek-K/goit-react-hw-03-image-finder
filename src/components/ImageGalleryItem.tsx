@@ -1,10 +1,10 @@
 import { Component } from "react";
-import Modal from "./Modal";
 
 interface ImageGalleryItemProps {
   src: string;
   alt: string;
   largePhoto: string;
+  handleModalOpen(modalAlt: string, modalSrc: string): void;
 }
 interface State {
   isModalOpen: boolean;
@@ -17,30 +17,21 @@ class ImageGalleryItem extends Component<ImageGalleryItemProps, State> {
       isModalOpen: false,
     };
   }
+  handleModalOpen = () => {
+    this.props.handleModalOpen(this.props.alt, this.props.src);
+  };
 
-  openModal = () => {
-    this.setState({ isModalOpen: true });
-  };
-  closeModal = () => {
-    this.setState({ isModalOpen: false });
-  };
+
 
   render() {
     return (
       <li className="ImageGalleryItem">
         <img
-          onClick={this.openModal}
+          onClick={this.handleModalOpen}
           className="ImageGalleryItem-image"
           src={this.props.src}
           alt={this.props.alt}
         />
-        {this.state.isModalOpen ? (
-          <Modal
-            src={this.props.largePhoto}
-            alt={this.props.alt}
-            closeModal={this.closeModal}
-          />
-        ) : null}
       </li>
     );
   }

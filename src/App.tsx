@@ -7,6 +7,7 @@ import Searchbar from "./components/Searchbar.tsx";
 
 import { fetchPhotosWithQuery } from "./services/api";
 import type { PhotoI } from "./types/Photo.ts";
+import Modal from "./components/Modal.tsx";
 
 interface State {
   page: number;
@@ -14,6 +15,9 @@ interface State {
   isloading: boolean;
   photos: PhotoI[];
   isEnd: boolean;
+  isModalOpen: boolean;
+  modalSrc: string;
+  modalAlt: string;
 }
 
 export default class App extends Component<object, State> {
@@ -23,8 +27,11 @@ export default class App extends Component<object, State> {
       page: 1,
       query: "dog",
       isloading: false,
+      isModalOpen: false,
       photos: [],
       isEnd: false,
+      modalSrc: "",
+      modalAlt: "",
     };
   }
 
@@ -67,14 +74,29 @@ export default class App extends Component<object, State> {
       this.getPhotos(this.state.query, this.state.page);
     }
   }
-
+  handleModalOpen = (modalAlt: string, modalSrc: string) => {
+    this.setState({ modalAlt, modalSrc, isModalOpen: true });
+  };
+  closeModal = () => {
+    this.setState({ isModalOpen: false, modalAlt: "", modalSrc: "" });
+  };
   render() {
     return (
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
         <div className="App">
-          <ImageGallery photos={this.state.photos} />
+          <ImageGallery
+            photos={this.state.photos}
+            handleModalOpen={this.handleModalOpen}
+          />
           {this.state.isloading ? <Loader /> : null}
+          {this.state.isModalOpen ? (
+            <Modal
+              src={this.state.modalSrc}
+              alt={this.state.modalAlt}
+              closeModal={this.closeModal}
+            />
+          ) : null}
           {!this.state.isEnd ? (
             <Button onClick={this.loadMore} title="Load More" />
           ) : null}
